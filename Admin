@@ -1,0 +1,16 @@
+
+public class Admin extends Karyawan{
+
+	public Admin(String name, String gender, String jabatan, String code, double gaji){
+		super(name, gender, jabatan, code, gaji);
+	}
+
+	@Override
+	public void updateSalary() {
+		gaji = getGaji()*1.05;
+		setGaji(gaji);
+		System.out.print(getCode() + ", ");
+	}
+
+
+}
