@@ -1,0 +1,19 @@
+
+public class Manager extends Karyawan{
+
+	public Manager(String code, String name, String gender, String jabatan, double gaji) {
+		super();
+		this.code = code;
+		this.name = name;
+		this.gender = gender;
+		this.jabatan = jabatan;
+		this.gaji = gaji;
+	}
+	
+	@Override
+	public void updateSalary() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
