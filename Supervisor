@@ -1,0 +1,21 @@
+
+public class Supervisor extends Karyawan{
+
+	public Supervisor(String code, String name, String gender, String jabatan, double gaji) {
+		super();
+		this.code = code;
+		this.name = name;
+		this.gender = gender;
+		this.jabatan = jabatan;
+		this.gaji = gaji;
+	}
+	
+	@Override
+	public void updateSalary() {
+		setGaji(getGaji() * 1.075);
+		System.out.print(getCode()+", ");
+	}
+	
+	
+	
+}
