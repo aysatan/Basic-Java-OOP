@@ -1,0 +1,270 @@
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Vector;
+
+public class Main {
+
+	Scanner scan = new Scanner(System.in);
+	Random rand = new Random();
+	Vector<Karyawan>vKaryawan = new Vector<>();
+	
+	int counterManager=0, counterSupervisor=0, counterAdmin=0;
+	
+	void cls(){
+		for(int i=0; i<30; i++){
+			System.out.println();
+		}
+	}
+	
+	public int catchInt(){
+		int x=-1;
+		try {
+			x = scan.nextInt();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} scan.nextLine();
+		return x;
+	}
+	
+	void menu(){
+		int input=-1;
+		while (true){
+			
+		
+			cls();
+			System.out.println(" \tNatasya's Company");
+			System.out.println("=======================");
+			System.out.println("1. Insert data karyawan");
+			System.out.println("2. View data karyawan");
+			System.out.println("3. Update data karyawan");
+			System.out.println("4. Delete data karyawan");
+			
+			do {
+				System.out.print("Choose: ");
+				input=catchInt();
+			} while(input<1 || input>4);
+			
+			switch(input){
+			case 1:
+				insert();
+				break;
+				
+			case 2:
+				view();
+				System.out.println("\nPress enter to continue...");
+				scan.nextLine();
+				break;
+				
+			case 3:
+				update();
+				break;
+				
+			case 4:
+				delete();
+				break;
+			}
+		}
+	}
+	
+	void insert(){
+		
+		String code="", name="", gender="", jabatan="";
+		double gaji=-1.00;
+		
+		cls();
+		do {
+			System.out.print("Input nama karyawan [>=3]: ");
+			name = scan.nextLine();
+		} while(name.length()<3);
+		
+		do {
+			System.out.print("Input jenis kelamin [Laki-laki | Perempuan] (Case Sensitive): ");
+			gender = scan.nextLine();
+		} while(!gender.equals("Laki-laki") && !gender.equals("Perempuan"));
+		
+		do {
+			System.out.print("Input jabatan [Manager | Supervisor | Admin] (Case Sensitive): ");
+			jabatan = scan.nextLine();
+		} while(!jabatan.equals("Manager") && !jabatan.equals("Supervisor") && !jabatan.equals("Admin"));
+		
+		
+			if(jabatan.equals("Manager")){
+				gaji = 8000000;
+			}
+			else if(jabatan.equals("Supervisor")){
+				gaji = 6000000;
+			}
+			else {
+				gaji = 4000000;
+			}
+		
+		
+		
+		code = code + ((char)makeRandom('A', 'Z')) + ((char)makeRandom('A', 'Z')) 
+				+ "-" + (makeRandom(0,9)) + (makeRandom(0,9)) 
+				+ (makeRandom(0,9)) + (makeRandom(0,9));
+		
+		
+		if(jabatan.equals("Manager")){
+			vKaryawan.add(new Manager(code, name, gender, jabatan, gaji));
+			++counterManager;
+		}
+		else if(jabatan.equals("Supervisor")){
+			vKaryawan.add(new Supervisor(code, name, gender, jabatan, gaji));
+			++counterSupervisor;
+		}
+		else {
+			vKaryawan.add(new Admin(code, name, gender, jabatan, gaji));
+			++counterAdmin;
+		}
+		
+		System.out.println("Berhasil menambahkan karyawan dengan ID: " + code);
+		
+			if(counterAdmin%3==1 && counterAdmin>3){
+				System.out.println("Bonus sebesar 5% telah diberikan kepada karyawan dengan ID: ");
+				for(int i=0; i<vKaryawan.size()-1; i++){
+					if(vKaryawan.get(i) instanceof Admin){
+						vKaryawan.get(i).updateSalary();
+					}
+				}
+			}
+			else if(counterSupervisor%3==1 && counterSupervisor>3){
+				System.out.print("Bonus sebesar 7.5% telah diberikan kepada karyawan dengan ID: ");
+				for(int i=0; i<vKaryawan.size()-1; i++){
+					if(vKaryawan.get(i) instanceof Supervisor){
+						vKaryawan.get(i).updateSalary();
+					}
+				}
+			}
+			else if (counterManager%3==1 && counterManager>3){
+				System.out.print("Bonus sebesar 10% telah diberikan kepada karyawan dengan ID: ");
+				for(int i=0; i<vKaryawan.size()-1; i++){
+					if(vKaryawan.get(i) instanceof Manager){
+						gaji = vKaryawan.get(i).getGaji()*1.1;
+						vKaryawan.get(i).setGaji(gaji);
+						System.out.print(vKaryawan.get(i).getCode()+", ");
+					}
+				}
+			}
+		
+		System.out.println("\nENTER to return...");
+		scan.nextLine();
+	}
+	
+	int makeRandom(int min, int max){
+		//min = 0
+		//max = 9
+		return rand.nextInt(max-min+1)+min;
+	}
+	
+	void view(){
+		cls();
+		if(vKaryawan.isEmpty()){
+			System.out.println("No data!");
+		}
+		else{
+			sort();
+			System.out.println("|====================================================================================================================================|");
+			System.out.println("| No. \t| Kode Karyawan | Nama Karyawan \t| Jenis Kelamin | Jabatan | Gaji Karyawan |");
+			System.out.println("|====================================================================================================================================|");
+			for(int i=0; i<vKaryawan.size(); i++){
+				System.out.println("| "+(i+1) + "\t| " + vKaryawan.get(i).getCode() +"\t| "+ vKaryawan.get(i).getName()+"\t| "+ vKaryawan.get(i).getGender() +"\t| "+ vKaryawan.get(i).getJabatan() +"\t| "+ (int)vKaryawan.get(i).getGaji() + "|");
+			}
+			System.out.println("|====================================================================================================================================|");
+		}
+	}
+
+	void sort(){
+		for(int i=0; i<vKaryawan.size()-1; i++){
+			for(int j=i+1; j<vKaryawan.size(); j++){
+				if(vKaryawan.get(i).getName().compareTo(vKaryawan.get(j).getName())>0){
+					Karyawan temp = vKaryawan.get(i);
+					vKaryawan.set(i, vKaryawan.get(j));
+					vKaryawan.set(j, temp);
+				}
+			}
+		}
+	}
+
+	void update(){
+		String code="", name="", gender="", jabatan="";
+		double gaji=-1.00;
+		int index=-1;
+		
+		if(vKaryawan.isEmpty()){
+			System.out.println("No data!");
+		}
+		else{
+			view();
+			
+			do{
+				System.out.print("Select number to update [1-" + vKaryawan.size() + "]: ");
+				index = catchInt();
+			} while (index<1 || index>vKaryawan.size());
+			
+			index--;
+			
+			do {
+				System.out.print("Input nama karyawan [>=3]: ");
+				name = scan.nextLine();
+			} while(name.length()<3);
+			
+			do {
+				System.out.print("Input jenis kelamin [Laki-laki | Perempuan] (Case Sensitive): ");
+				gender = scan.nextLine();
+			} while(!gender.equals("Laki-laki") && !gender.equals("Perempuan"));
+			
+			do {
+				System.out.print("Input jabatan [Manager | Supervisor | Admin] (Case Sensitive): ");
+				jabatan = scan.nextLine();
+			} while(!jabatan.equals("Manager") && !jabatan.equals("Supervisor") && !jabatan.equals("Admin"));
+			
+			if(jabatan=="Manager"){
+				vKaryawan.set(index, new Manager(code, name, gender, jabatan, gaji));
+			}
+			else if(jabatan=="Supervisor"){
+				vKaryawan.set(index, new Supervisor(code, name, gender, jabatan, gaji));
+			}
+			else {
+				vKaryawan.set(index, new Admin(code, name, gender, jabatan, gaji));
+			}
+			
+			view();
+			System.out.println("Berhasil meng-update karyawan!");
+		}
+
+	}
+	
+	void delete(){
+		int index=-1;
+		
+		if(vKaryawan.isEmpty()){
+			System.out.println("No data!");
+		}
+		else{
+			view();
+			
+			do{
+				System.out.print("Select number to delete [1-" + vKaryawan.size() + "]: ");
+				index = catchInt();
+			} while (index<1 || index>vKaryawan.size());
+			
+			index--;
+			
+			vKaryawan.remove(index);
+			
+			view();
+			System.out.println("Berhasil men-delete karyawan!");
+		}
+	}
+	
+	public Main() {
+		menu();
+	}
+
+	public static void main(String[] args) {
+		new Main();
+
+	}
+
+}
