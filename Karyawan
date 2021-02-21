@@ -1,0 +1,83 @@
+
+public abstract class Karyawan {
+	protected String code="", name="", gender="", jabatan="";
+	protected double gaji=-1;
+	
+	public Karyawan() {
+		// TODO Auto-generated constructor stub
+	}
+ 
+	
+	
+	public String getCode() {
+		return code;
+	}
+
+
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+
+
+	public String getName() {
+		return name;
+	}
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
+	public String getGender() {
+		return gender;
+	}
+
+
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+
+
+	public String getJabatan() {
+		return jabatan;
+	}
+
+
+
+	public void setJabatan(String jabatan) {
+		this.jabatan = jabatan;
+	}
+
+
+
+	public double getGaji() {
+		return gaji;
+	}
+
+
+
+	public void setGaji(double gaji) {
+		this.gaji = gaji;
+	}
+
+
+
+	public Karyawan(String code, String name, String gender, String jabatan, double gaji) {
+		super();
+		this.code = code;
+		this.name = name;
+		this.gender = gender;
+		this.jabatan = jabatan;
+		this.gaji = gaji;
+	}
+	
+	public abstract void updateSalary();
+
+}
